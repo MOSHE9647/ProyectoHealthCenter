@@ -1,0 +1,127 @@
+@import url("../gui/main.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ecf0f1;
+    overflow: hidden;
+
+    /*Background Gradiente*/
+    background: #6a11cb;
+    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+    background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+}
+
+.main-container {
+	display: flex;
+	justify-content: center;
+    flex-direction: column;
+    background: var(--bg);
+	align-items: center;
+    border-radius: 15px;
+    padding: 2rem;
+	height: 620px;
+	width: 65%;
+}
+
+.page-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+}
+
+.main-container p {
+    margin-top: 14px;
+    margin-bottom: 8px;
+    color: #999696;
+}
+
+.account {
+    padding: 2rem 1rem 1rem 1rem;
+    overflow-y: auto;
+    height: 100%;
+    width: 100%;
+}
+
+.account h3 {
+    color: #ecf0f1;
+    font-size: 1.5rem;
+}
+
+.account h3 span {
+    font-size: 1.5rem;
+    margin-right: .4rem;
+}
+
+.account hr {
+    border-color: var(--bg-body);
+    margin: 20px auto;
+    width: 100%;
+}
+
+.form-section {
+    margin-bottom: 4rem;
+}
+
+.form-row {
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.form-col {
+    margin-right: 50px;
+    width: 100%;
+}
+
+form div:last-child {
+    margin-bottom: 0;
+}
+
+form input,
+select,
+button {
+    margin-top: 5px;
+    width: 100%;
+}
+
+.footer {
+    margin-top: 8px;
+    padding: 15px;
+}
+
+.footer a {
+    font-weight: bold;
+    color: #999696;
+    transition: color 200ms;
+}
+
+@media only screen and (max-width: 768px) {
+    .main-container {
+        width: 80%;
+    }
+    
+    .form-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-col {
+        margin: auto;
+        margin-bottom: 40px;
+        width: 100%;
+    }
+}

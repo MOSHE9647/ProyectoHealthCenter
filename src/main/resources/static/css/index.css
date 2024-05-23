@@ -1,0 +1,14 @@
+/**
+ * Archivo CSS que contiene los estilos relacionados
+ * al apartado 'Inicio' o 'Index' de la Pagina Web.
+ * @author Isaac Herrera
+ */
+
+@import url(../css/gui/main.css);
+
+#notification-container {
+    position: fixed;
+    top: calc(60px + 20px);
+    left: calc(100% - 600px);
+    width: 600px;
+}

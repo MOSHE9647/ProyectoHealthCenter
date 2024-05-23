@@ -1,0 +1,82 @@
+<div id="table-equipos" th:fragment="equiposTable(equiposPage, pageSizeOptions)">
+
+    <input th:if="${equiposPage}" type="hidden" id="equiposPageNumber" th:value="${equiposPage.number}">
+	<input th:unless="${equiposPage}" type="hidden" id="equiposPageNumber" value="-1">
+
+    <div class="record-header">
+
+        <div class="order-by">
+            <span>Ordenar por:</span>
+            <select id="sortEquiposBy" name="sortEquipos" onchange="sortBy('equiposPageNumber', 'sortEquiposBy', 'pageEquiposSize', 'config/equipos', '#table-equipos')">
+				<option value="fechaFabricacion" th:selected="${equiposPage != null && equiposPage.sort.isSorted() and equiposPage.sort.getOrderFor('fechaFabricacion') != null}">Fecha</option>
+				<option value="tipo" th:selected="${equiposPage != null && equiposPage.sort.isSorted() and equiposPage.sort.getOrderFor('tipo') != null}">Tipo</option>
+                <option value="cantidad" th:selected="${equiposPage != null && equiposPage.sort.isSorted() and equiposPage.sort.getOrderFor('cantidad') != null}">Cantidad</option>
+				<option value="marca" th:selected="${equiposPage != null && equiposPage.sort.isSorted() and equiposPage.sort.getOrderFor('marca') != null}">Marca</option>
+				<option value="disponible" th:selected="${equiposPage != null && equiposPage.sort.isSorted() and equiposPage.sort.getOrderFor('disponible') != null}">Disponible</option>
+            </select>
+        </div>
+
+        <button class="add-btn">A&ntilde;adir</button>
+        
+    </div>
+
+    <table width = "100%">
+		<thead>
+			<tr>
+				<th>Tipo</th>
+				<th>Fecha Fabricaci&oacute;n</th>
+				<th>Cantidad</th>
+				<th>Marca</th>
+				<th>Disponible</th>
+                <th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody th:if="${equiposPage}">
+			<tr th:each="equipo : ${equiposPage.content}">
+				<td th:text="${equipo.tipo}"></td>
+				<td th:text="${equipo.fechaFabricacion}"></td>
+				<td th:text="${equipo.cantidad}"></td>
+				<td th:text="${equipo.marca}"></td>
+				<td th:text="${equipo.disponible ? 'Si' : 'No'}"></td>
+				<td> <!-- Botones eliminar, editar e info -->
+					<div class="actions">
+						<a href="#" class="las la-edit" th:attr="data-email=${equipo.id}"></a>
+						<a href="#" class="las la-trash-alt" th:attr="data-tipo=${equipo.tipo}"></a>
+						<a href="#" class="las la-info-circle"></a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+    <!-- Fila en caso de no haber registros -->
+	<div th:unless="${equiposPage}" class="nodata">
+		<i class="la la-user-times"></i>
+		<p>Ocurri&oacute; un error mostrando la lista de equipos</p>
+	</div>
+
+    <!-- Paginacion de la tabla -->
+	<div th:if="${equiposPage != null && equiposPage.totalElements > 5}" class="pagination-container" th:with="equiposTableURL=@{/config/equipos}">
+		
+		<div>
+			<span>Mostrando</span>
+			<select name="size" id="pageEquiposSize" onchange="changePageSize('equiposPageNumber', 'pageEquiposSize', 'config/equipos', '#table-equipos')">
+				<option th:each="size : ${pageSizeOptions}" th:value="${size}" th:text="${size}" th:selected="${equiposPage.size == size}"></option>
+			</select>
+			<span>registros</span>
+			<!-- <span>de <span class="page-num"><span th:text="${equiposPage.totalElements}"></span></span> registros</span></span></span> -->
+		</div>
+
+		<div>
+			<a class="pag" id="firstEquiposPage" data-table-id="#table-equipos" th:href="@{${equiposTableURL} + '?page=0&size=' + ${equiposPage.size}}"><span class="las la-fast-backward"></span></a>
+			<a class="pag" id="prevEquiposPage" data-table-id="#table-equipos" th:if="${equiposPage.number > 0}" th:with="prevPage=${equiposPage.number - 1}" th:href="@{${equiposTableURL} + '?page=' + ${prevPage} + '&size=' + ${equiposPage.size}}"><span class="las la-arrow-left"></span></a>
+			
+			<span class="page-num">Página <span th:text="${equiposPage.number + 1}"></span> de <span th:text="${equiposPage.totalPages}"></span></span>
+			
+			<a class="pag" id="nextEquiposPage" data-table-id="#table-equipos" th:if="${equiposPage.number < equiposPage.totalPages - 1}" th:with="nextPage=${equiposPage.number + 1}" th:href="@{${equiposTableURL} + '?page=' + ${nextPage} + '&size=' + ${equiposPage.size}}"><span class="las la-arrow-right"></span></a>
+			<a class="pag" id="lastEquiposPage" data-table-id="#table-equipos" th:with="lastPage=${equiposPage.totalPages - 1}" th:href="@{${equiposTableURL} + '?page=' + ${lastPage} + '&size=' + ${equiposPage.size}}"><span class="las la-fast-forward"></span></a>
+		</div>		
+
+	</div>
+
+</div>

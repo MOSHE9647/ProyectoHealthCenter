@@ -1,0 +1,287 @@
+<!-- Titulo de bienvenida -->
+<div class="page-header">
+    <div class="page-title">
+        <h1>Mi <span>Perfil</span>:</h1>
+        <small>Inicio <span>/</span> Cuenta</small>
+    </div>
+</div>
+
+<div class="page-content">
+
+    <!-- Estilos CSS Extra -->
+    <link rel="stylesheet" th:href="@{/css/account.css}">
+
+    <!-- Contenedor con la informacion del usuario -->
+    <div class="account">
+
+        <!-- Formulario para actualizacion de datos -->
+        <form 
+            id="updateForm" method="post" th:object="${usuario}"
+            th:action="${'/api/v1/' + usuario.getClass().getSimpleName().toLowerCase() + '/update'}">
+
+            <!-- Seccion 1: Informacion General -->
+            <div class="form-section">
+
+                <!-- Titulo de la seccion -->
+                <h3>
+                    <span class="las la-info-circle"></span>
+                    Informaci&oacute;n General
+                </h3><hr>
+
+                <!-- Informacion ordenada en filas y columnas -->
+                <!-- Fila 1: Datos generales (Admin) -->
+                <div class="form-row">
+                    <input type="hidden" name="id" th:value="${usuario.ID}" th:field="*{ID}">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" name="nombre" th:value="${usuario.nombre}" th:field="*{nombre}" required>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" name="apellido" th:value="${usuario.apellido}" th:field="*{apellido}" required>
+                    </div>
+
+                    <!-- Columna 3 -->
+                    <div class="form-col">
+                        <label for="cedula">C&eacute;dula:</label>
+                        <input type="text" name="cedula" th:value="${usuario.cedula}" th:field="*{cedula}" required>
+                    </div>
+
+                </div>
+                
+                <!-- Fila 2: Datos generales (Paciente) -->
+                <div class="form-row" th:if="${usuario.tipo == 'Paciente'}">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="estadoCivil">Estado Civil:</label>
+                        <select name="estadoCivil" th:field="*{estadoCivil}">
+                            <option value="NO ESPECIFICADO" th:selected="${usuario.estadoCivil == 'NO ESPECIFICADO'}">NO ESPECIFICADO</option>
+                            <option value="SOLTERO" th:selected="${usuario.estadoCivil == 'SOLTERO'}">SOLTERO/A</option>
+                            <option value="CASADO" th:selected="${usuario.estadoCivil == 'CASADO'}">CASADO/A</option>
+                            <option value="UNIÓN LIBRE" th:selected="${usuario.estadoCivil == 'UNIÓN LIBRE'}">UNIÓN LIBRE</option>
+                            <option value="DIVORCIADO" th:selected="${usuario.estadoCivil == 'DIVORCIADO'}">DIVORCIADO/A</option>
+                            <option value="SEPARADO JUDICIAL" th:selected="${usuario.estadoCivil == 'SEPARADO JUDICIAL'}">SEPARADO JUDICIAL</option>
+                            <option value="VIUDO" th:selected="${usuario.estadoCivil == 'VIUDO'}">VIUDO/A</option>
+                        </select>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="escolaridad">Escolaridad:</label>
+                        <select name="escolaridad" th:field="*{escolaridad}">
+                            <option value="NINGUNA" th:selected="${usuario.escolaridad == 'NINGUNA'}">NINGUNA</option>
+                            <option value="PRIMARIA-COMPLETA" th:selected="${usuario.escolaridad == 'PRIMARIA-COMPLETA'}">PRIMARIA (COMPLETA)</option>
+                            <option value="PRIMARIA-INCOMPLETA" th:selected="${usuario.escolaridad == 'PRIMARIA-INCOMPLETA'}">PRIMARIA (INCOMPLETA)</option>
+                            <option value="SECUNDARIA-COMPLETA" th:selected="${usuario.escolaridad == 'SECUNDARIA-COMPLETA'}">SECUNDARIA (COMPLETA)</option>
+                            <option value="SECUNDARIA-INCOMPLETA" th:selected="${usuario.escolaridad == 'SECUNDARIA-INCOMPLETA'}">SECUNDARIA (INCOMPLETA)</option>
+                            <option value="UNIVERSIDAD-COMPLETA" th:selected="${usuario.escolaridad == 'UNIVERSIDAD-COMPLETA'}">UNIVERSIDAD (COMPLETA)</option>
+                            <option value="UNIVERSIDAD-INCOMPLETA" th:selected="${usuario.escolaridad == 'UNIVERSIDAD-INCOMPLETA'}">UNIVERSIDAD (INCOMPLETA)</option>
+                        </select>
+                    </div>
+
+                    <!-- Columna 3 -->
+                    <div class="form-col">
+                        <label for="ocupacion">Ocupaci&oacute;n:</label>
+                        <input type="text" name="ocupacion" th:value="${usuario.ocupacion}" th:field="*{ocupacion}">
+                    </div>
+
+                </div>
+                
+                <!-- Fila 3: Datos generales (Empleado) -->
+                <div class="form-row" th:if="${usuario.tipo == 'Empleado'}">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="cuentaBancaria">Cuenta Bancaria:</label>
+                        <input type="text" name="cuentaBancaria" th:value="${usuario.cuentaBancaria}" th:field="*{cuentaBancaria}">
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="areaTrabajo">&Aacute;rea de Trabajo:</label>
+                        <input type="text" name="areaTrabajo" th:value="${usuario.areaTrabajo}" th:field="*{areaTrabajo}" required>
+                    </div>
+
+                    <!-- Columna 3 -->
+                    <div class="form-col">
+                        <label for="profesion">Profesi&oacute;n:</label>
+                        <input type="text" name="profesion" th:value="${usuario.profesion}" th:field="*{profesion}" required>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Seccion 2: Detalles de Ubicacion (Direccion) -->
+            <div class="form-section">
+
+                <!-- Titulo de la seccion -->
+                <h3>
+                    <span class="las la-map-marker-alt"></span>
+                    Detalles de Ubicaci&oacute;n
+                </h3><hr>
+
+                <!-- Informacion ordenada en filas y columnas -->
+                <!-- Fila 1 -->
+                <div class="form-row">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="provincia">Provincia:</label>
+                        <select name="provincia" th:field="*{direccion.provincia}" required>
+                            <option value="San José" th:selected="${direccion != null and direccion.provincia == 'San José'}">SAN JOS&Eacute;</option>
+                            <option value="Guanacaste" th:selected="${direccion != null and direccion.provincia == 'Guanacaste'}">GUANACASTE</option>
+                            <option value="Alajuela" th:selected="${direccion != null and direccion.provincia == 'Alajuela'}">ALAJUELA</option>
+                            <option value="Heredia" th:selected="${direccion != null and direccion.provincia == 'Heredia'}">HEREDIA</option>
+                            <option value="Cartago" th:selected="${direccion != null and direccion.provincia == 'Cartago'}">CARTAGO</option>
+                            <option value="Puntarenas" th:selected="${direccion != null and direccion.provincia == 'Puntarenas'}">PUNTARENAS</option>
+                            <option value="Limón" th:selected="${direccion != null and direccion.provincia == 'Limón'}">LIM&Oacute;N</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="canton">Cant&oacute;n:</label>
+                        <input type="text" name="canton" th:value="${direccion != null ? direccion.canton : ''}" th:field="*{direccion.canton}" required>
+                    </div>
+                    
+                    <!-- Columna 3 -->
+                    <div class="form-col">
+                        <label for="distrito">Distrito:</label>
+                        <input type="text" name="distrito" th:value="${direccion != null ? direccion.distrito : ''}" th:field="*{direccion.distrito}" required>
+                    </div>
+
+                </div>
+                
+                <!-- Fila 2 -->
+                <div class="form-row">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="barrio">Barrio:</label>
+                        <input type="text" name="barrio" th:value="${direccion != null ? direccion.barrio : ''}" th:field="*{direccion.barrio}" required>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="informacionAdicional">Informaci&oacute;n Adicional:</label>
+                        <input type="text" name="informacionAdicional" th:value="${direccion != null ? direccion.informacionAdicional : ''}" th:field="*{direccion.informacionAdicional}">
+                    </div>
+
+                </div>
+
+            </div>
+            
+            <!-- Seccion 3: Informacion de Contacto -->
+            <div class="form-section">
+
+                <!-- Titulo de la seccion -->
+                <h3>
+                    <span class="las la-phone"></span>
+                    Informaci&oacute;n de Contacto
+                </h3><hr>
+
+                <!-- Informacion ordenada en filas y columnas -->
+                <div class="form-row">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="email">Correo Electr&oacute;nico:</label>
+                        <input type="email" name="email" th:value="${usuario.email}" th:field="*{email}" required>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="telefono">N° Tel&eacute;fono:</label>
+                        <input type="tel" name="telefono" th:value="${usuario.telefono}" th:field="*{telefono}" required>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Seccion 4: Informacion Medica (Paciente) -->
+            <div class="form-section" th:if="${usuario.tipo == 'Paciente'}">
+
+                <!-- Titulo de la seccion -->
+                <h3>
+                    <span class="las la-notes-medical"></span>
+                    Informaci&oacute;n M&eacute;dica
+                </h3><hr>
+
+                <!-- Informacion ordenada en filas y columnas -->
+                <!-- Fila 1 -->
+                <div class="form-row">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="tipoSangre">Tipo de Sangre:</label>
+                        <select name="tipoSangre">
+                            <option value="N/A" th:selected="${usuario.tipoSangre == 'N/A'}">NO REGISTRADO</option>
+                            <option value="A+" th:selected="${usuario.tipoSangre == 'A+'}">A+</option>
+                            <option value="A-" th:selected="${usuario.tipoSangre == 'A-'}">A-</option>
+                            <option value="B+" th:selected="${usuario.tipoSangre == 'B+'}">B+</option>
+                            <option value="B-" th:selected="${usuario.tipoSangre == 'B-'}">B-</option>
+                            <option value="AB+" th:selected="${usuario.tipoSangre == 'AB+'}">AB+</option>
+                            <option value="AB-" th:selected="${usuario.tipoSangre == 'AB-'}">AB-</option>
+                            <option value="O+" th:selected="${usuario.tipoSangre == 'O+'}">O+</option>
+                            <option value="O-" th:selected="${usuario.tipoSangre == 'O-'}">O-</option>
+                        </select>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="peso">Peso (kg):</label>
+                        <input type="number" name="peso" min="0" th:value="${usuario.peso}" th:field="*{peso}">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Seccion 5: Cambio de Contrasena -->
+            <div class="form-section">
+
+                <!-- Titulo de la seccion -->
+                <h3>
+                    <span class="las la-lock"></span>
+                    Cambio de Contrase&ntilde;a
+                </h3><hr>
+
+                <!-- Informacion ordenada en filas y columnas -->
+                <!-- Fila 1 -->
+                <div class="form-row">
+
+                    <!-- Columna 1 -->
+                    <div class="form-col">
+                        <label for="password">Contrase&ntilde;a Nueva:</label>
+                        <input type="password" id="password" name="password" th:field="*{password}" required>
+                    </div>
+
+                    <!-- Columna 2 -->
+                    <div class="form-col">
+                        <label for="confirmPassword">Confirmar Contrase&ntilde;a:</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Seccion 6: Para ubicacion del boton -->
+            <div class="form-section">
+                <button type="button" onclick="actualizarUsuario()">Guardar</button>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<!-- Script para agregar en la pagina -->
+<script class="scriptJS" th:src="@{/js/account.js}"></script>

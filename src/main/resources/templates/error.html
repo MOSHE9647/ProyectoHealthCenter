@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+	<!-- @author Isaac Herrera -->
+	<head xmlns="http://www.thymeleaf.org">
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Ha ocurrido un error</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/error.css}" />
+	</head>
+	<body>
+		<div class="overlay"></div>
+		<div class="stars" aria-hidden="true"></div>
+		<div class="starts2" aria-hidden="true"></div>
+		<div class="stars3" aria-hidden="true"></div>
+		<main class="main">
+			<section class="contact">
+				<h1 class="title">Health Center</h1>
+				<h2 class="sub-title" th:text="${error}"></h2>
+				<p><a class="index-link" th:href="${referer}">Volver</a></p>
+			</section>
+		</main>
+	</body>
+</html>

@@ -1,0 +1,91 @@
+<div id="table-citas" th:fragment="citasTable(citasPage, pageSizeOptions)">
+
+    <input th:if="${citasPage}" type="hidden" id="citasPageNumber" th:value="${citasPage.number}">
+	<input th:unless="${citasPage}" type="hidden" id="citasPageNumber" value="-1">
+
+    <!-- Encabezado de la Tabla -->
+    <div class="record-header">
+    
+        <!-- Ordenamiento de los registros -->
+        <div class="order-by">
+            <span>Ordenar por:</span>
+                <select id="sortCitasBy" name="sortCitas" onchange="sortBy('citasPageNumber', 'sortCitasBy', 'pageCitasSize', 'config/citas', '#table-citas')">
+                    <option value="" th:selected="${citasPage != null && citasPage.sort.isSorted() && citasPage.sort.getOrderFor('paciente.cedula') != null}">C&eacute;dula</option>
+                    <option value="" th:selected="${citasPage != null && citasPage.sort.isSorted() && citasPage.sort.getOrderFor('paciente.nombre') != null}">Nombre</option>
+                    <option value="" th:selected="${citasPage != null && citasPage.sort.isSorted() && citasPage.sort.getOrderFor('fecha') != null}">Fecha</option>
+                </select>
+        </div>
+
+		<button class="add-btn">A&ntilde;adir</button>
+    
+    </div>
+
+    <!-- Tabla -->
+    <div>
+        
+        <table width = "100%">
+            <thead>
+                <tr>
+                    <th>N° C&eacute;dula</th>
+                    <th>Nombre Paciente</th>
+                    <th>Fecha y Hora</th>
+                    <th>&Aacute;rea</th>
+                    <th>Especialidad</th>
+                    <th>Funcionario</th>
+                    <th>Consultorio</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody th:if="${citasPage}">
+                <tr th:each="cita : ${citasPage.content}">
+                    <td th:text="${cita.paciente.cedula}"></td>
+                    <td th:text="${cita.paciente.nombre + ' ' + cita.paciente.apellido}"></td>
+                    <td th:text="${cita.fecha}"></td>
+                    <td th:text="${cita.area}"></td>
+                    <td th:text="${cita.especialidad}"></td>
+                    <td th:text="${cita.medico.nombre}"></td>
+                    <td th:text="${cita.consultorio}"></td>
+                    <td> <!-- Botones eliminar, editar y mas -->
+                        <div class="actions">
+                            <a href="#" class="las la-edit"></a>
+                            <a href="#" class="las la-trash-alt"></a>
+                            <a href="#" class="las la-info-circle"></a>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Fila en caso de no haber registros -->
+        <div th:unless="${citasPage}" class="nodata">
+            <i class="lar la-calendar-times"></i>
+            <p>No se encontraron citas registradas.</p>
+        </div>
+
+        <!-- Paginacion de la pagina -->
+        <div th:if="${citasPage != null && citasPage.totalElements > 5}" class="pagination-container" th:with="citasTableURL=@{/config/citas}">
+    
+            <div>
+                <span>Mostrando</span>
+                <select name="size" id="pageCitasSize" onchange="changePageSize('citasPageNumber', 'pageCitasSize', 'config/citas', '#table-citas')">
+                    <option th:each="size : ${pageSizeOptions}" th:value="${size}" th:text="${size}" th:selected="${citasPage.size == size}"></option>
+                </select>
+                <span>registros</span>
+                <!-- <span>de <span class="page-num"><span th:text="${citasPage.totalElements}"></span></span> registros</span></span></span> -->
+            </div>
+    
+            <div>
+                <a class="pag" id="firstCitasPage" data-table-id="#table-citas" th:href="@{${citasTableURL} + '?page=0&size=' + ${citasPage.size}}"><span class="las la-fast-backward"></span></a>
+                <a class="pag" id="prevCitasPage" data-table-id="#table-citas" th:if="${citasPage.number > 0}" th:with="prevPage=${citasPage.number - 1}" th:href="@{${citasTableURL} + '?page=' + ${prevPage} + '&size=' + ${citasPage.size}}"><span class="las la-arrow-left"></span></a>
+                
+                <span class="page-num">Página <span th:text="${citasPage.number + 1}"></span> de <span th:text="${citasPage.totalPages}"></span></span>
+                
+                <a class="pag" id="nextCitasPage" data-table-id="#table-citas" th:if="${citasPage.number < citasPage.totalPages - 1}" th:with="nextPage=${citasPage.number + 1}" th:href="@{${citasTableURL} + '?page=' + ${nextPage} + '&size=' + ${citasPage.size}}"><span class="las la-arrow-right"></span></a>
+                <a class="pag" id="lastCitasPage" data-table-id="#table-citas" th:with="lastPage=${citasPage.totalPages - 1}" th:href="@{${citasTableURL} + '?page=' + ${lastPage} + '&size=' + ${citasPage.size}}"><span class="las la-fast-forward"></span></a>
+            </div>
+    
+        </div>
+
+    </div>
+
+</div>

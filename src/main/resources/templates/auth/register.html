@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es-cr" xmlns="https://www.thymeleaf.org">
+    <!-- @author Isaac Herrera -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registro | HealthCenter</title>
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+        <link rel="icon" th:href="@{/img/favicon.png}" type="image/png">
+        <link rel="stylesheet" th:href="@{/css/auth/register.css}">
+        <link rel="stylesheet" th:href="@{/css/gui/loader.css}">
+    </head>
+    <body>
+        <div id="notification-container"></div>
+        <div class="main-container">
+            <div class="page-title">
+                <h1>Registrarse</h1>
+                <p>Ingrese sus datos a continuaci&oacute;n</p>
+            </div>
+            <div class="account">
+                <form id="registerForm" th:action="@{/api/v1/paciente/register}" method="post" th:object="${paciente}">
+                    <div class="form-section">
+                        <h3>
+                            <span class="las la-info-circle"></span>
+                            Informaci&oacute;n General
+                        </h3><hr>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="nombre">Nombre:</label>
+                                <input type="text" name="nombre" th:field="*{nombre}" required>
+                            </div>
+                            <div class="form-col">
+                                <label for="apellido">Apellido:</label>
+                                <input type="text" name="apellido" th:field="*{apellido}" required>
+                            </div>
+                            <div class="form-col">
+                                <label for="cedula">C&eacute;dula:</label>
+                                <input type="text" name="cedula" th:field="*{cedula}" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="estadoCivil">Estado Civil:</label>
+                                <select name="estadoCivil" th:field="*{estadoCivil}">
+                                    <option value="NO ESPECIFICADO">NO ESPECIFICADO</option>
+                                    <option value="SOLTERO">SOLTERO/A</option>
+                                    <option value="CASADO">CASADO/A</option>
+                                    <option value="UNIÓN LIBRE">UNIÓN LIBRE</option>
+                                    <option value="DIVORCIADO">DIVORCIADO/A</option>
+                                    <option value="SEPARADO JUDICIAL">SEPARADO JUDICIAL</option>
+                                    <option value="VIUDO">VIUDO/A</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label for="escolaridad">Escolaridad:</label>
+                                <select name="escolaridad" th:field="*{escolaridad}">
+                                    <option value="NINGUNA">NINGUNA</option>
+                                    <option value="PRIMARIA-COMPLETA">PRIMARIA (COMPLETA)</option>
+                                    <option value="PRIMARIA-INCOMPLETA">PRIMARIA (INCOMPLETA)</option>
+                                    <option value="SECUNDARIA-COMPLETA">SECUNDARIA (COMPLETA)</option>
+                                    <option value="SECUNDARIA-INCOMPLETA">SECUNDARIA (INCOMPLETA)</option>
+                                    <option value="UNIVERSIDAD-COMPLETA">UNIVERSIDAD (COMPLETA)</option>
+                                    <option value="UNIVERSIDAD-INCOMPLETA">UNIVERSIDAD (INCOMPLETA)</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label for="ocupacion">Ocupaci&oacute;n:</label>
+                                <input type="text" name="ocupacion" th:field="*{ocupacion}" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3>
+                            <span class="las la-map-marker-alt"></span>
+                            Detalles de Ubicaci&oacute;n
+                        </h3><hr>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="provincia">Provincia:</label>
+                                <select name="provincia" th:field="*{direccion.provincia}" required>
+                                    <option value="San José">SAN JOS&Eacute;</option>
+                                    <option value="Guanacaste">GUANACASTE</option>
+                                    <option value="Alajuela">ALAJUELA</option>
+                                    <option value="Heredia">HEREDIA</option>
+                                    <option value="Cartago">CARTAGO</option>
+                                    <option value="Puntarenas">PUNTARENAS</option>
+                                    <option value="Limón">LIM&Oacute;N</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label for="canton">Cant&oacute;n:</label>
+                                <input type="text" name="canton" th:field="*{direccion.canton}" required>
+                            </div>
+                            <div class="form-col">
+                                <label for="distrito">Distrito:</label>
+                                <input type="text" name="distrito" th:field="*{direccion.distrito}" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="barrio">Barrio:</label>
+                                <input type="text" name="barrio" th:field="*{direccion.barrio}" required>
+                            </div>
+                            <div class="form-col">
+                                <label for="informacionAdicional">Informaci&oacute;n Adicional:</label>
+                                <input type="text" name="informacionAdicional" th:field="*{direccion.informacionAdicional}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3>
+                            <span class="las la-phone"></span>
+                            Informaci&oacute;n de Contacto
+                        </h3><hr>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="email">Correo Electr&oacute;nico:</label>
+                                <input type="email" name="email" th:field="*{email}" required>
+                            </div>
+                            <div class="form-col">
+                                <label for="telefono">N° Tel&eacute;fono:</label>
+                                <input type="tel" name="telefono" pattern="^\+\d{10}$" title="Ingrese un número de teléfono válido (Ej: +50612345678)" th:field="*{telefono}" required>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="form-section">
+                        <h3>
+                            <span class="las la-notes-medical"></span>
+                            Informaci&oacute;n M&eacute;dica
+                        </h3><hr>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="tipoSangre">Tipo de Sangre:</label>
+                                <select name="tipoSangre">
+                                    <option value="N/A">NO REGISTRADO</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                            <div class="form-col">
+                                <label for="peso">Peso (kg):</label>
+                                <input type="number" name="peso" min="0" th:field="*{peso}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <h3>
+                            <span class="las la-lock"></span>
+                            Crear Contrase&ntilde;a
+                        </h3><hr>
+                        <div class="form-row">
+                            <div class="form-col">
+                                <label for="password">Contrase&ntilde;a:</label>
+                                <input type="password" id="password" name="password" th:field="*{password}">
+                            </div>
+                            <div class="form-col">
+                                <label for="confirmPassword">Confirmar Contrase&ntilde;a:</label>
+                                <input type="password" id="confirmPassword" name="confirmPassword">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-section">
+                        <!-- <input type="hidden" name="tipo" th:field="*{tipo}" value="Paciente"> -->
+                        <button type="button" onclick="registrarse()">REGISTRARSE</button>
+                    </div>
+                </form>
+            </div>
+            <div class="footer">
+                <p>Ya tienes una cuenta? <a id="login-link" th:href="@{/login}">Inicia sesi&oacute;n</a></p>
+            </div>
+        </div>
+
+        <div class="loader-container">
+            <div class="lds-ring loader" id="loader"><div></div><div></div><div></div><div></div></div>
+        </div>
+
+        <script th:src="@{/js/notification.js}"></script>
+        <script th:src="@{/js/validacion.js}"></script>
+        <script>
+            // Muestra el loader
+            function showLoader() {
+                document.getElementById("loader").style.display = "flex";
+            }
+
+            // Oculta el loader
+            function hideLoader() {
+                document.getElementById("loader").style.display = "none";
+            }
+
+            function registrarse() {
+                var formID = "registerForm";
+                if (validarPasswords()) {
+                    showLoader();
+                    var form = document.getElementById(formID);
+                    var formData = new FormData(form);
+                    var url = form.getAttribute("action");
+
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.open("POST", url, true);
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState === 4) {
+                            hideLoader();
+                            if (xmlhttp.status === 200) {
+                                var response = JSON.parse(xmlhttp.responseText);
+                                mostrarMensaje(response.titulo, response.mensaje, response.tipo);
+                                if (response.tipo !== "error") {
+                                    setTimeout(function() {
+                                        var loginURL = document.getElementById('login-link');
+                                        var linkURL = loginURL.href + "?success";
+                                        window.location.href = linkURL;
+                                    }, 5400);
+                                }
+                            } else {
+                                mostrarMensaje("Error en el servidor", "Error al enviar la solicitud: " + xmlhttp.statusText, "error");
+                            }
+                        }
+                    };
+                    xmlhttp.send(formData);
+                }
+            }
+        </script>
+    </body>
+</html>

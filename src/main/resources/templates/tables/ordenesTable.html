@@ -1,0 +1,85 @@
+<div id="table-ordenes" th:fragment="ordenesTable(page, pageSizeOptions)">
+
+	<input th:if="${page}" type="hidden" id="pageNumber" th:value="${page.number}">
+	<input th:unless="${page}" type="hidden" id="pageNumber" value="-1">
+
+	<!-- Encabezado de la Tabla -->
+	<div class="record-header">
+
+		<!-- Ordenamiento de los registros -->
+		<div class="order-by">
+			<span>Ordenar por:</span>
+				<select id="sortByOrdenes" name="sortOrdenes" onchange="sortOrdenesBy()">
+					<option value="paciente.cedula" th:selected="${page != null && page.sort.isSorted() && page.sort.getOrderFor('paciente.cedula') != null}">C&eacute;dula</option>
+					<option value="paciente.nombre" th:selected="${page != null && page.sort.isSorted() && page.sort.getOrderFor('paciente.nombre') != null}">Nombre</option>
+					<option value="fecha" th:selected="${page != null && page.sort.isSorted() && page.sort.getOrderFor('fecha') != null}">Fecha</option>
+				</select>
+			<button>Ordenar</button>
+		</div>
+
+	</div>
+
+	<!-- Tabla -->
+	<div>
+
+		<table width="100%">
+			<thead>
+				<tr>
+					<th>N° C&eacute;dula</th>
+					<th>Nombre Paciente</th>
+					<th>Fecha Solicitud</th>
+					<th>M&eacute;dico</th>
+					<th>Prioridad</th>
+					<th>Estado</th>
+					<th>Acciones</th>
+				</tr>
+			</thead>
+			<tbody th:if="${page}">
+				<tr th:each="orden : ${page.content}">
+					<td th:text="${orden.paciente.cedula}"></td>
+					<td th:text="${orden.paciente.nombre + ' ' + orden.paciente.apellido}"></td>
+					<td th:text="${orden.fechaSolicitud}"></td>
+					<td th:text="${orden.medico.nombre}"></td>
+					<td th:text="${orden.prioridad}"></td>
+					<td th:text="${orden.estado}"></td>
+					<td>
+						<div class="actions">
+							<a href="#" class="las la-edit"></a>
+							<a href="#" class="las la-trash-alt"></a>
+							<a href="#" class="las la-ellipsis-v"></a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<!-- Fila en caso de no haber registros -->
+		<div th:unless="${page}" class="nodata">
+			<i class="las la-times-circle"></i>
+			<p>No se encontraron ex&aacute;menes registrados.</p>
+		</div>
+
+		<!-- Paginacion de la pagina -->
+		<div th:if="${page}" class="pagination-container">
+			
+			<div>
+				<span>Mostrando</span>
+				<select name="size" id="pageSize" onchange="changeOrdenesPageSize()">
+					<option th:each="size : ${pageSizeOptions}" th:value="${size}" th:text="${size}" th:selected="${page.size == size}"></option>
+				</select>
+				<span>de <span class="page-num"><span th:text="${page.totalElements}"></span></span> registros</span></span></span>
+			</div>
+	
+			<div>
+				<a class="pag" th:href="@{'/orden-laboratorio?page=0&size=' + ${page.size}}"><span class="las la-fast-backward"></span></a>
+				<a class="pag" th:with="prevPage=${page.number - 1}" th:href="@{'/orden-laboratorio?page=' + ${prevPage} + '&size=' + ${page.size}}"><span class="las la-arrow-left"></span></a>
+				<span class="page-num">P&aacute;gina <span th:text="${page.number + 1}"></span> de <span th:text="${page.totalPages}"></span></span>
+				<a class="pag" th:with="nextPage=${page.number + 1}" th:href="@{'/orden-laboratorio?page=' + ${nextPage} + '&size=' + ${page.size}}"><span class="las la-arrow-right"></span></a>
+				<a class="pag" th:with="lastPage=${page.totalPages - 1}" th:href="@{'/orden-laboratorio?page=' + ${lastPage} + '&size=' + ${page.size}}"><span class="las la-fast-forward"></span></a>
+			</div>
+
+		</div>
+
+	</div>
+
+</div>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es-cr" xmlns="https://www.thymeleaf.org">
+<!-- @author Isaac Herrera -->
+
+<head>
+	<!-- Metadata -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Inicio | HealthCenter</title>
+
+	<!-- Icono de la Pagina -->
+	<link rel="icon" th:href="@{/img/favicon.png}" type="image/png">
+
+	<!-- Iconos CSS -->
+	<link rel="stylesheet"
+		href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+	<!-- Estilos CSS -->
+	<link rel="stylesheet" th:href="@{/css/gui/main.css}">
+	<link rel="stylesheet" th:href="@{/css/gui/table.css}">
+	<link rel="stylesheet" th:href="@{/css/index.css}">
+</head>
+
+<body>
+	<!-- Input para mostrar u ocultar el menu lateral -->
+	<input type="checkbox" id="menu-toggle">
+
+	<!-- Barra lateral de la pagina -->
+	<nav class="sidebar">
+
+		<!-- Nombre (marca) de la pagina -->
+		<div class="brand">
+			<span class="las la-laptop-medical"></span>
+			<h2>HealthCenter</h2>
+		</div>
+
+		<!-- Menu de la barra lateral -->
+		<div class="sidemenu">
+
+			<!-- Informacion del Usuario -->
+			<div class="side-user">
+
+				<!-- Imagen del Usuario -->
+				<div class="side-img" style="background-image: url(/img/logo.jpg);"></div>
+
+				<!-- Nombre y tipo de Usuario -->
+				<div th:if="${usuario}" class="user">
+					<small>[[${usuario.nombre}]] [[${usuario.apellido}]]</small>
+					<p th:text="${usuario.tipo}"></p>
+				</div>
+
+			</div>
+
+			<!-- Enlaces del Menu Lateral -->
+			<ul>
+				<!-- Inicio -->
+				<li>
+					<!-- La clase 'active' indica que esta seleccionado  -->
+					<a href="/index" onclick="window.location.href='/index'" class="active">
+						<span class="las la-home"></span>
+						<span>Inicio</span>
+					</a>
+				</li><hr>
+
+				<!-- Citas -->
+				<li>
+					<a href="./citas">
+						<span class="las la-calendar-check"></span>
+						<span>Citas</span>
+					</a>
+				</li>
+
+				<!-- Diagnosticos -->
+				<li>
+					<a href="./diagnosticos">
+						<span class="las la-stethoscope"></span>
+						<span>Di&aacute;gnosticos</span>
+					</a>
+				</li>
+
+				<!-- Recetas Medicas -->
+				<li>
+					<a href="./recetas">
+						<span class="las la-file-prescription"></span>
+						<span>Recetas M&eacute;dicas</span>
+					</a>
+				</li>
+
+				<!-- Expediente Medico -->
+				<li>
+					<a href="./expediente">
+						<span class="las la-file-medical-alt"></span>
+						<span>Expediente M&eacute;dico</span>
+					</a>
+				</li>
+
+				<!-- Examenes de Laboratorio -->
+				<li>
+					<a href="./examenes">
+						<span class="las la-vial"></span>
+						<span>Ex&aacute;menes de Laboratorio</span>
+					</a>
+				</li>
+
+				<!-- Prestamo de Equipo -->
+				<li>
+					<a href="./prestamos">
+						<span class="las la-wheelchair"></span>
+						<span>Pr&eacute;stamo de Equipo</span>
+					</a>
+				</li>
+
+				<!-- Solicitar Tranasporte -->
+				<li>
+					<a href="./transporte">
+						<span class="las la-ambulance"></span>
+						<span>Solicitar Transporte</span>
+					</a>
+				</li><hr>
+
+				<!-- Perfil del Usuario -->
+				<li>
+					<a href="./view/account">
+						<span class="las la-user"></span>
+						<span>Mi Perfil</span>
+					</a>
+				</li>
+			</ul>
+
+		</div>
+	</nav>
+
+	<!-- Contenido de la Pagina -->
+	<div class="main-content">
+
+		<!-- Barra superior de la pagina -->
+		<header>
+
+			<!-- Boton para mostrar/ocultar el menu -->
+			<label for="menu-toggle" class="menu-toggler">
+				<span class="las la-bars"></span>
+			</label>
+
+			<div class="head-icons">
+				
+				<!-- Boton 'Config' -->
+				<div th:if="${usuario.tipo == 'Administrador'}" class="head-icon">
+					<a onclick="cargarVista('./config', 'main')">
+						<span class="las la-cog"></span>
+						<span>Config</span>
+					</a>
+				</div>
+	
+				<!-- Boton 'Cerrar sesion' -->
+				<div class="head-icon">
+					<a th:href="@{/logout}">
+						<span class="las la-sign-out-alt"></span>
+						<span>Cerrar Sesi&oacute;n</span>
+					</a>
+				</div>
+
+			</div>
+
+		</header>
+			
+		<!-- Contenedor para las notificaciones -->
+		<div id="notification-container"></div>
+
+		<!-- Contenido principal de la pagina (se reemplaza con AJAX) -->
+		<main>
+
+			<!-- Titulo de bienvenida -->
+			<div class="page-header">
+				<div class="page-title">
+					<h1>Bienvenido/a <span>[[${usuario.nombre}]] [[${usuario.apellido}]]</span>:</h1>
+					<small>Inicio <span>/</span> Res&uacute;men</small>
+				</div>
+			</div>
+
+			<!-- Tablas con Citas y Examenes de Laboratorio -->
+			<div class="page-content">
+
+				<!-- Tabla 'Citas' -->
+				<div class="records table-responsive">
+
+					<!-- Titulo de la tabla -->
+					<h3>
+						<span class="las la-calendar-check"></span>
+						Citas
+					</h3><hr>
+
+					<div th:replace="~{tables/citasTable :: citasTable(citasPage = ${pageCitas}, pageSizeOptions = ${pageSizeOptions})}"></div>
+
+				</div>
+
+				<!-- Tabla 'Examenes de Laboratorio' -->
+				<div class="records table-responsive">
+
+					<!-- Titulo de la tabla -->
+					<h3>
+						<span class="las la-vial"></span>
+						Ex&aacute;menes de Laboratorio
+					</h3><hr>
+
+					<div th:replace="~{tables/ordenesTable :: ordenesTable(page = ${pageOrdenesLaboratorio}, pageSizeOptions = ${pageSizeOptions})}"></div>
+
+				</div>
+
+			</div>
+
+		</main>
+
+	</div>
+
+	<!-- Boton menu en caso de ser vista movil -->
+	<label class="close-mobile-menu" for="menu-toggle"></label>
+
+	<!-- Loader -->
+	<div class="loader-container">
+		<div class="lds-ring loader" id="loader"><div></div><div></div><div></div><div></div></div>
+	</div>
+	
+	<!-- Scripts de la pagina -->
+	<script th:src="@{/js/notification.js}"></script>
+	<script th:src="@{/js/loader.js}"></script>
+	<script>
+		function cargarScripts() {
+			// Obtener todos los elementos con la clase 'scriptJS'
+			var scriptElements = document.querySelectorAll('.scriptJS');
+
+			if (scriptElements !== null) {
+				// Iterar sobre los elementos de script y agregarlos al documento
+				scriptElements.forEach(function(scriptElement) {
+					var script = document.createElement('script');
+					script.src = scriptElement.getAttribute('src');
+					document.body.appendChild(script);
+				});
+			}
+		}
+
+		function cargarVista(url, contID) {
+			showLoader();
+			var xhttp = new XMLHttpRequest();
+			xhttp.open("GET", url, true);
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4) {
+					hideLoader();
+					if (this.status == 200) {
+						document.querySelector(contID).innerHTML = this.responseText;
+						cargarScripts();
+						initPaginationLinks();
+					} else {
+						mostrarMensaje("Error interno", "Error al comunicarse con el servidor", "error");
+					}
+				}
+			};
+			xhttp.send();
+		}
+
+		function goToTablePage(pageBtnID, tableContID) {
+			var pageBtn = document.getElementById(pageBtnID);
+			var url = pageBtn.getAttribute('href');
+			cargarVista(url, tableContID);
+		}
+
+		function initPaginationLinks() {
+			var enlaces = document.querySelectorAll(".pag");
+			if (enlaces !== null) {
+				for (var i = 0; i < enlaces.length; i++) {
+					var enlace = enlaces[i];
+					enlace.addEventListener("click", function(event) {
+						event.preventDefault();
+						var id = this.id;
+						var tableId = this.getAttribute("data-table-id");
+						goToTablePage(id, tableId);
+					});
+				}
+			}
+		}
+
+		document.addEventListener("DOMContentLoaded", function() {
+			var enlaces = document.querySelectorAll(".sidemenu a");
+			for (var i = 0; i < enlaces.length; i++) {
+				var enlace = enlaces[i];
+				enlace.addEventListener("click", function(event) {
+					event.preventDefault();
+					enlaces.forEach(element => {
+						element.classList.remove('active');
+					});
+					var url = this.getAttribute("href");
+					cargarVista(url, 'main');
+					enlace.classList.add('active');
+				});
+			}
+		});
+	</script>
+</body>
+
+</html>

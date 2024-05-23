@@ -1,0 +1,89 @@
+<div id="table-users" th:fragment="usersTable(usersPage, pageSizeOptions)">
+
+	<input th:if="${usersPage}" type="hidden" id="usersPageNumber" th:value="${usersPage.number}">
+	<input th:unless="${usersPage}" type="hidden" id="usersPageNumber" value="-1">
+
+	<!-- Encabezado de la Tabla -->
+	<div class="record-header">
+
+		<!-- Ordenamiento de los registros -->
+		<div class="order-by">
+			<span>Ordenar por:</span>
+			<select id="sortUsersBy" name="sortUsers" onchange="sortBy('usersPageNumber', 'sortUsersBy', 'pageUsersSize', 'config/users', '#table-users')">
+				<option value="cedula" th:selected="${usersPage != null && usersPage.sort.isSorted() and usersPage.sort.getOrderFor('cedula') != null}">Cédula</option>
+				<option value="nombre" th:selected="${usersPage != null && usersPage.sort.isSorted() and usersPage.sort.getOrderFor('nombre') != null}">Nombre</option>
+				<option value="apellido" th:selected="${usersPage != null && usersPage.sort.isSorted() and usersPage.sort.getOrderFor('apellido') != null}">Apellido</option>
+				<option value="email" th:selected="${usersPage != null && usersPage.sort.isSorted() and usersPage.sort.getOrderFor('email') != null}">Correo</option>
+				<option value="tipo" th:selected="${usersPage != null && usersPage.sort.isSorted() and usersPage.sort.getOrderFor('tipo') != null}">Tipo</option>
+			</select>
+		</div>
+
+		<button class="add-btn">A&ntilde;adir</button>
+	
+	</div>
+
+	<table width = "100%">
+		<thead>
+			<tr>
+				<th>N° Cédula</th>
+				<th>Nombre</th>
+				<th>Teléfono</th>
+				<th>Dirección</th>
+				<th>Correo</th>
+				<th>Tipo</th>
+				<th>Acciones</th>
+			</tr>
+		</thead>
+		<tbody th:if="${usersPage}">
+			<tr th:each="user : ${usersPage.content}">
+				<td th:text="${user.cedula}"></td>
+				<td th:text="${user.nombre + ' ' + user.apellido}"></td>
+				<td th:text="${user.telefono}"></td>
+				<td th:text="${user.direccion}"></td>
+				<td th:text="${user.email}"></td>
+				<td th:text="${user.tipo}"></td>
+				<td> <!-- Botones eliminar, editar e info -->
+					<div class="actions">
+						<a onclick="editarUsuario(this.getAttribute('data-email'))" class="las la-edit" th:attr="data-email=${user.email}"></a>
+						<a  th:if="${usuario.email != user.email}"
+							class="las la-trash-alt" th:attr="data-tipo=${user.tipo}, data-email=${user.email}"
+							onclick="eliminarUsuario(this.getAttribute('data-email'), this.getAttribute('data-tipo'))">
+						</a>
+						<a href="#" class="las la-info-circle"></a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	
+	<!-- Fila en caso de no haber registros -->
+	<div th:unless="${usersPage}" class="nodata">
+		<i class="la la-user-times"></i>
+		<p>Ocurrió un error mostrando los usuarios</p>
+	</div>
+
+	<!-- Paginacion de la tabla -->
+	<div th:if="${usersPage != null && usersPage.totalElements > 5}" class="pagination-container" th:with="usersTableURL=@{/config/users}">
+		
+		<div>
+			<span>Mostrando</span>
+			<select name="size" id="pageUsersSize" onchange="changePageSize('usersPageNumber', 'pageUsersSize', 'config/users', '#table-users')">
+				<option th:each="size : ${pageSizeOptions}" th:value="${size}" th:text="${size}" th:selected="${usersPage.size == size}"></option>
+			</select>
+			<span>registros</span>
+			<!-- <span>de <span class="page-num"><span th:text="${usersPage.totalElements}"></span></span> registros</span></span></span> -->
+		</div>
+
+		<div>
+			<a class="pag" id="firstUsersPage" data-table-id="#table-users" th:href="@{${usersTableURL} + '?page=0&size=' + ${usersPage.size}}"><span class="las la-fast-backward"></span></a>
+			<a class="pag" id="prevUsersPage" data-table-id="#table-users" th:if="${usersPage.number > 0}" th:with="prevPage=${usersPage.number - 1}" th:href="@{${usersTableURL} + '?page=' + ${prevPage} + '&size=' + ${usersPage.size}}"><span class="las la-arrow-left"></span></a>
+			
+			<span class="page-num">Página <span th:text="${usersPage.number + 1}"></span> de <span th:text="${usersPage.totalPages}"></span></span>
+			
+			<a class="pag" id="nextUsersPage" data-table-id="#table-users" th:if="${usersPage.number < usersPage.totalPages - 1}" th:with="nextPage=${usersPage.number + 1}" th:href="@{${usersTableURL} + '?page=' + ${nextPage} + '&size=' + ${usersPage.size}}"><span class="las la-arrow-right"></span></a>
+			<a class="pag" id="lastUsersPage" data-table-id="#table-users" th:with="lastPage=${usersPage.totalPages - 1}" th:href="@{${usersTableURL} + '?page=' + ${lastPage} + '&size=' + ${usersPage.size}}"><span class="las la-fast-forward"></span></a>
+		</div>		
+
+	</div>
+
+</div>

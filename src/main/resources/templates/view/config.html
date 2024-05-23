@@ -1,0 +1,54 @@
+<!-- Titulo de la Pagina -->
+<div class="page-header">
+    <div class="page-title">
+        <h1>Configuraci&oacute;n <span>Health Center</span>:</h1>
+        <small>Inicio <span>/</span> Configuraci&oacute;n</small>
+    </div>
+</div>
+
+<div class="page-content">
+
+    <!-- Tabla 'Usuarios' -->
+    <div class="records table-responsive">
+
+        <!-- Titulo de la tabla -->
+        <h3>
+            <span class="las la-user-friends"></span>
+            Configuraci&oacute;n de Usuarios
+        </h3><hr>
+
+        <div id="table-users" th:replace="~{tables/usersTable :: usersTable(usersPage = ${usersPage}, pageSizeOptions = ${pageSizeOptions})}"></div>
+
+    </div>
+
+    <!-- Tabla 'Citas' -->
+    <div class="records table-responsive">
+
+        <!-- Titulo de la tabla -->
+        <h3>
+            <span class="las la-calendar-check"></span>
+            Configuraci&oacute;n de Citas
+        </h3><hr>
+
+        <div id="table-citas" th:replace="~{tables/citasTable :: citasTable(citasPage = ${citasPage}, pageSizeOptions = ${pageSizeOptions})}"></div>
+
+    </div>
+
+    <!-- Tabla 'Equipos Medicos' -->
+    <div class="records table-responsive">
+
+        <!-- Titulo de la tabla -->
+        <h3>
+            <span class="las la-calendar-check"></span>
+            Configuraci&oacute;n de Equipos M&eacute;dicos
+        </h3><hr>
+
+        <div id="table-equipos" th:replace="~{tables/equiposTable :: equiposTable(equiposPage = ${equiposPage}, pageSizeOptions = ${pageSizeOptions})}"></div>
+
+    </div>
+
+    <form id="deleteForm" th:action="${'/api/v1/usuario/delete'}" method="POST"></form>
+
+</div>
+
+<script class="scriptJS" th:src="@{/js/config.js}"></script>

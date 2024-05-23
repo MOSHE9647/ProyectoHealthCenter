@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es-cr" xmls='https://thymeleaf.org'>
+    <!-- @author Isaac Herrera -->
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Inicio de Sesión | HealthCenter</title>
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+        <link rel="icon" th:href="@{/img/favicon.png}" type="image/png">
+        <link rel="stylesheet" th:href="@{/css/auth/login.css}">
+    </head>
+    <body>
+        <div id="notification-container" th:if="${param.error} or ${param.logout} or ${param.success}">
+            <div id="toastNotification" class="toast">
+                <div class="toast-content">
+                    <i th:if="${param.logout} or ${param.success}" class="fas fa-solid las la-check check success"></i>
+                    <i th:if="${param.error}" class="fas fa-solid las la-times check error"></i>
+                    <div class="message">
+                        <!-- Mensaje de Registro Exitoso -->
+                        <span class="text text-1" th:if="${param.success}">Registro Exitoso</span>
+                        <span class="text text-2" th:if="${param.success}">Sus credenciales fueron enviadas al correo registrado</span>
+                        <!-- Mensaje de Cierre de Sesion -->
+                        <span class="text text-1" th:if="${param.logout}">Cerrar Sesi&oacute;n</span>
+                        <span class="text text-2" th:if="${param.logout}">Sesión cerrada correctamente.</span>
+                        <!-- Mensaje de Error -->
+                        <span class="text text-1" th:if="${param.error}">Error</span>
+                        <span class="text text-2" th:if="${param.error}" th:text="${errorMessage}"></span>
+                    </div>
+                </div>
+                <i class="fa-solid las la-times close"></i>
+                <div th:if="${param.logout} or ${param.success}" class="progress success"></div>
+                <div th:if="${param.error}" class="progress error"></div>
+            </div>
+        </div>
+        <div class="main-container">
+            <h1>Inicio de Sesi&oacute;n</h1>
+            <p>Inicie sesión con su correo y contraseña</p><br>
+            <form class="form" th:action="@{/auth/v1/login}" method="post">
+                <label for="email">Correo</label>
+                <input type="email" name="username" id="email" required>
+                <label for="password">Contrase&ntilde;a</label>
+                <input type="password" name="password" id="password" required>
+                <a href="#">Olvid&oacute; su contrase&ntilde;a?</a>
+                <button type="submit">INICIAR</button>
+            </form>
+            <a href="https://github.com/CarlosOrellanaEst/proyectoProgra4" target="_blank" class="github-icon">
+                <i class="lab la-github"></i></a>
+            <p>No tienes una cuenta? <a class="register-link" th:href="@{/register}">Reg&iacute;strate</a></p>
+        </div>
+        <script th:src="@{/js/notification.js}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var toastNotification = document.getElementById('toastNotification');
+                if (toastNotification !== null) {
+                    initializeToast();
+                }
+            });
+        </script>
+    </body>
+</html>

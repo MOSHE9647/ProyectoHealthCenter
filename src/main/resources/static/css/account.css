@@ -1,0 +1,62 @@
+@import url(./gui/main.css);
+
+.account {
+    margin-bottom: 1rem;
+    border-radius: 3px;
+    padding: 1rem;
+}
+
+.account h3 {
+    color: var(--main);
+    font-size: 1.4rem;
+}
+
+.account h3 span {
+    font-size: 1.6rem;
+    margin-right: .4rem;
+}
+
+.account hr {
+    border-color: var(--bg-body);
+    margin: 20px auto;
+    width: 100%;
+}
+
+.form-section {
+    margin-bottom: 4rem;
+}
+
+.form-row {
+    color: var(--main);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.form-col {
+    margin-right: 50px;
+    width: 100%;
+}
+
+form div:last-child {
+    margin-bottom: 0;
+}
+
+form input, select, button {
+    margin-top: 5px;
+    width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-col {
+        margin: auto;
+        margin-bottom: 40px;
+        width: 100%;
+    }
+}
