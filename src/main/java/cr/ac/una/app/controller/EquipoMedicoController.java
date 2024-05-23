@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @RestController
-@RequestMapping(path = "/equipo")
+@RequestMapping(path = "/api/v1/equipos")
 public class EquipoMedicoController {
     
     @Autowired

@@ -15,8 +15,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cr.ac.una.app.model.EquipoMedico;
+import cr.ac.una.app.model.PrestamoEquipo;
 import cr.ac.una.app.model.Usuario;
 import cr.ac.una.app.service.EquipoMedicoService;
+import cr.ac.una.app.service.PrestamoEquipoService;
 import cr.ac.una.app.service.UsuarioService;
 
 
@@ -36,6 +38,9 @@ public class ConfigController {
 	@Autowired
 	EquipoMedicoService equipoMedicoService;
 
+	@Autowired
+	PrestamoEquipoService prestamoEquipoService;
+
 	private 
 	List<Integer> pageSizeOptions = Arrays.asList(5, 10, 20);
 
@@ -53,13 +58,14 @@ public class ConfigController {
 		// La paginación se controla mediante el objeto Pageable proporcionado por Spring.
 		Page<Usuario> usersPage = usuarioService.obtenerPageUsuarios(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 		Page<EquipoMedico> equiposPage = equipoMedicoService.obtenerPageEquipoMedico(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+		Page<PrestamoEquipo> prestamosPage = prestamoEquipoService.obtenerPagePrestamoEquipo(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 		// Page<Cita> citasPage = citaService.obtenerPageCitas(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
 
 		// Verifica si la página tiene algún registro.
 		// Si la página no está vacía, la añade al modelo para que pueda ser utilizada en la vista.
 		if (!usersPage.isEmpty()) { model.addAttribute("usersPage", usersPage); }
 		if (!equiposPage.isEmpty()) { model.addAttribute("equiposPage", equiposPage); }
-
+		if (!prestamosPage.isEmpty()) { model.addAttribute("prestamosPage", prestamosPage); }
 		// if (!citasPage.isEmpty()) { model.addAttribute("citasPage", citasPage); }
 
 		// Define las opciones de tamaño de página disponibles para la paginación.
@@ -93,6 +99,17 @@ public class ConfigController {
 
 		model.addAttribute("pageSizeOptions", pageSizeOptions);
 		return "tables/equiposTable";
+	}
+
+	@GetMapping("/prestamos")
+	public String getPrestamosPage(@PageableDefault(size = 5, page = 0, sort = "paciente.cedula") Pageable pageable, Model model) {
+		Page<PrestamoEquipo> prestamosPage = prestamoEquipoService.obtenerPagePrestamoEquipo(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()));
+		if (!prestamosPage.isEmpty()) { 
+			model.addAttribute("prestamosPage", prestamosPage);
+		}
+
+		model.addAttribute("pageSizeOptions", pageSizeOptions);
+		return "tables/prestamosTable";
 	}
 
 	@GetMapping("/citas")
